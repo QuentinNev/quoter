@@ -1,7 +1,6 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Quoter',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -27,7 +26,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Quoter Home Page'),
     );
   }
 }
@@ -52,11 +51,21 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String _quote = '';
+  String _author = '';
 
-  void _getNewQuote() {
-    setState(() {
-      _quote = 'mdr';
-    });
+  void _getNewQuote() async {
+    var url = Uri.https('api.quotable.io', '/random', {'q': 'http'});
+
+    var response = await http.get(url);
+    if (response.statusCode == 200) {
+      setState(() {
+        var decoded = convert.jsonDecode(response.body) as Map<String, dynamic>;
+        _quote = decoded['content'];
+        _author = decoded['author'];
+      });
+    } else {
+      print('Request failed with status: ${response.statusCode}.');
+    }
   }
 
   @override
@@ -73,9 +82,8 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
         child: Column(
           // Column is also a layout widget. It takes a list of children and
           // arranges them vertically. By default, it sizes itself to fit its
@@ -93,16 +101,25 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              _quote,
-            ),
+            Text.rich(TextSpan(children: <TextSpan>[
+              TextSpan(
+                  text: _quote,
+                  style: const TextStyle(fontSize: 20, fontStyle: FontStyle.italic))
+            ])),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Text(
+              _author,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+              textAlign: TextAlign.right,
+            ),)
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _getNewQuote,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        tooltip: 'Swag',
+        child: const Icon(Icons.favorite),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
