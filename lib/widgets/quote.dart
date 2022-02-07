@@ -1,35 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:quoter/models/quote.dart';
 
-class QuoteDiplay extends StatelessWidget {
-  const QuoteDiplay({Key? key}) : super(key: key);
+class QuoteDisplay extends StatefulWidget {
+  const QuoteDisplay({Key? key}) : super(key: key);
+
+  @override
+  _QuoteDisplayState createState() => _QuoteDisplayState();
+}
+
+class _QuoteDisplayState extends State<QuoteDisplay> {
+  String _quote = "";
+  String _author = "";
+
+  void changeQuote(Quote quote) {
+    setState(() {
+      _quote = quote.body;
+      _author = quote.author;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 56.0, // in logical pixels
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      decoration: BoxDecoration(color: Colors.blue[500]),
-      // Row is a horizontal, linear layout.
-      child: Row(
-        // <Widget> is the type of items in the list.
-        children: [
-          const IconButton(
-            icon: Icon(Icons.menu),
-            tooltip: 'Navigation menu',
-            onPressed: null, // null disables the button
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text.rich(TextSpan(children: <TextSpan>[
+          TextSpan(
+              text: _quote,
+              style: const TextStyle(fontSize: 20, fontStyle: FontStyle.italic))
+        ])),
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Text(
+            _author,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+            textAlign: TextAlign.right,
           ),
-          // Expanded expands its child
-          // to fill the available space.
-          Expanded(
-            child: title,
-          ),
-          const IconButton(
-            icon: Icon(Icons.search),
-            tooltip: 'Search',
-            onPressed: null,
-          ),
-        ],
-      ),
+        )
+      ],
     );
   }
 }
