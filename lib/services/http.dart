@@ -3,7 +3,16 @@ import 'dart:convert' as convert;
 
 import 'package:quoter/models/quote.dart';
 
-Future<Quote> getNewQuote() async {
+Quote getNewQuote() {
+  Future<Quote> future = _request();
+
+  future.then((Quote value) {
+    return value;
+  });
+  return Quote('', '');
+}
+
+Future<Quote> _request() async {
   var _quote;
   var _author;
   var _url = Uri.https('api.quotable.io', '/random', {'q': 'http'});
