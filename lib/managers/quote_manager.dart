@@ -19,13 +19,9 @@ class QuoteManager {
     _streamController.add(await _provider.fetch());
   }
 
-  // Register this manager locator
-  // (Every manager will have such a method)
   static void register() {
     GetIt.I.registerLazySingleton(() => QuoteManager(QuotableIoProvider()));
   }
 
-  // Returns the manager instance
-  // (Every manager will have such a getter)
   static QuoteManager get instance => GetIt.I.get<QuoteManager>();
 }

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:quoter/managers/favorite_quote_manager.dart';
 import 'package:quoter/managers/quote_manager.dart';
 import 'package:quoter/pages/home_page.dart';
 
 void main() {
-  // Every manager will be registered here by calling its register() static method
   QuoteManager.register();
+  FavoriteQuoteManager.register();
   runApp(const QuoterApp());
 }
 

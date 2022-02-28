@@ -1,4 +1,3 @@
-// This class is completely decoupled from the state management and the UI.
 class Quote {
   String body;
   String author;
