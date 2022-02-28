@@ -9,7 +9,7 @@ class QuotableIoProvider implements QuoteProvider {
 
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body);
-      return Quote(json['content'], json['author']);
+      return Quote(json['content'], json['author'], false);
     } else {
       throw Exception(response.reasonPhrase!);
     }

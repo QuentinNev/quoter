@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it_mixin/get_it_mixin.dart';
 
@@ -19,7 +20,8 @@ class HomePage extends StatelessWidget {
         actions: [
           IconButton(
             icon: Icon(Icons.favorite),
-            onPressed:() => Navigator.push(context, MaterialPageRoute(builder:(context) => FavoritePage())),
+            onPressed: () => Navigator.push(context,
+                MaterialPageRoute(builder: (context) => FavoritePage())),
           ),
         ],
       ),
@@ -39,39 +41,46 @@ class _ScrollableQuoteView extends StatelessWidget with GetItMixin {
   @override
   Widget build(BuildContext context) {
     // Connects the the QuoteManager event stream
-    AsyncSnapshot<Quote> snapshot = watchStream((QuoteManager m) => m.stream, Quote.none());
+    AsyncSnapshot<Quote> snapshot =
+        watchStream((QuoteManager m) => m.stream, Quote.none());
 
     return SingleChildScrollView(
       child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: MediaQuery.of(context).size.height - 100,
-          ),
-          child: Center(
-            child: _buildSnapshot(context, snapshot),
-          ),
+        constraints: BoxConstraints(
+          minHeight: MediaQuery.of(context).size.height - 100,
         ),
+        child: Center(
+          child: _buildSnapshot(context, snapshot),
+        ),
+      ),
     );
   }
 
   Widget _buildSnapshot(BuildContext context, AsyncSnapshot<Quote> snapshot) {
     if (snapshot.hasData) {
       return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            QuoteView(snapshot.data!),
-            Padding(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          QuoteView(snapshot.data!),
+          Padding(
               padding: const EdgeInsets.only(top: 16),
               child: IconButton(
                 icon: Icon(Icons.favorite),
-                color: Colors.red,
-                onPressed: () => FavoriteQuoteManager.instance.add(snapshot.data!),
-              )
-            ),
-          ],
-        );
+                color: _getColor(snapshot.data!.isFavorite),
+                onPressed: () =>
+                    FavoriteQuoteManager.instance.add(snapshot.data!),
+              )),
+        ],
+      );
     } else if (snapshot.hasError) {
-      return Text('${snapshot.error}', style: TextStyle(color: Colors.red, fontSize: 32));
+      return Text('${snapshot.error}',
+          style: TextStyle(color: Colors.red, fontSize: 32));
     }
     return const CircularProgressIndicator();
+  }
+
+  Color _getColor(favorite) {
+    print("DEBUG : " + favorite.toString());
+    return (favorite) ? Colors.red : Colors.blue;
   }
 }

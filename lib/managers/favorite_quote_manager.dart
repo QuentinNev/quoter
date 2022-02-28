@@ -7,12 +7,16 @@ class FavoriteQuoteManager {
   List<Quote> get quotes => _quotes;
 
   void add(Quote quote) {
-    _quotes.add(quote);
+    if (!_quotes.any((element) => element.body == quote.body)) {
+      _quotes.add(quote);
+      quote.isFavorite = true;
+    }
   }
 
   static void register() {
     GetIt.I.registerLazySingleton(() => FavoriteQuoteManager());
   }
 
-  static FavoriteQuoteManager get instance => GetIt.I.get<FavoriteQuoteManager>();
+  static FavoriteQuoteManager get instance =>
+      GetIt.I.get<FavoriteQuoteManager>();
 }

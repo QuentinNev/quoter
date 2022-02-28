@@ -9,7 +9,7 @@ class FavoritePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Quote"),
+        title: const Text("Favorites"),
       ),
       body: _buildQuoteList(context),
       floatingActionButton: FloatingActionButton(
